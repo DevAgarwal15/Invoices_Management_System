@@ -1,0 +1,17 @@
+{% extends 'Base.html' %}
+{% block content %}
+    {% for invoice in all_invoices %}
+        <h1>Invoice For {{ invoice.cust_name }}</h1>
+        <p>Invoice Number: {{ invoice.invoice_number }}</p>
+        <p>Total Amount: {{ invoice.amount }}</p>
+    {% empty %}
+        <p>No invoices available.</p>
+    {% endfor %}
+
+    {% comment %} <h1>Unpaid Invoices</h1>
+    {%for invoice in unpaid_invoices%}
+    {{invoice.invoice_number}}-
+    {{invoice.cust_name}}-
+    {{invoice.amount}}-
+    {%endfor%} {% endcomment %}
+{% endblock %}

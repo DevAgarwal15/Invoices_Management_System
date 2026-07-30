@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+{%block content%}
+{%if paid_invoices%}
+{%for invoice in paid_invoices%}
+{{invoice.cust_name}}--
+{{invoice.invoice_number}}--
+{{invoice.amount}}--
+{{invoice.date_created}}--
+{%endfor%}
+{%else%}
+<h1>No Invoice Found</h1>
+{%endif%}
+{%endblock%}

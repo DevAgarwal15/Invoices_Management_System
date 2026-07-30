@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block content%}
+<h1>Create Your Account</h1>
+<form method='POST'>
+    {%csrf_token%}
+    {{form.as_p}}
+    <button tyoe='submit'>Singn UP</button>
+</form>
+{%endblock%}

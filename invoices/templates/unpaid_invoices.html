@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block content%}
+{%for invoice in unpaid_invoices%}
+{{invoice.cust_name}}--
+{{invoice.invoice_number}}--
+{{invoice.amount}}--
+{{invoice.date_created}}--
+{%endfor%}
+{%endblock%}

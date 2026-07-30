@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if invoice %}
+        <h1>Invoice Details</h1>
+        <p><strong>Customer:</strong> {{ invoice.cust_name }}</p>
+        <p><strong>Invoice Number:</strong> {{ invoice.invoice_number }}</p>
+        <p><strong>Amount:</strong> {{ invoice.amount }}</p>
+        <p><strong>Status:</strong> {% if invoice.is_paid %}Paid{% else %}Pending{% endif %}</p>
+    {% else %}
+        <p>No invoice available yet.</p>
+    {% endif %}
+{% endblock %}
