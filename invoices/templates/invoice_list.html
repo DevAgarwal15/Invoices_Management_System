@@ -1,17 +1,68 @@
-{% extends 'Base.html' %}
-{% block content %}
-    {% for invoice in all_invoices %}
-        <h1>Invoice For {{ invoice.cust_name }}</h1>
-        <p>Invoice Number: {{ invoice.invoice_number }}</p>
-        <p>Total Amount: {{ invoice.amount }}</p>
-    {% empty %}
-        <p>No invoices available.</p>
-    {% endfor %}
+{% extends 'dashboard_base.html' %}
+{% block dashboard_content %}
+<div class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
+  <div class="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-center lg:justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold text-slate-900">Invoice ledger</h2>
+      <p class="mt-2 text-sm text-slate-500">Track every invoice with a professional, searchable table.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
+        <i data-lucide="search" class="h-4 w-4"></i>
+        <span>Search invoices</span>
+      </div>
+      <button class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600">Filter</button>
+      <a href="{% url 'dashboard' %}" class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700">Back to dashboard</a>
+    </div>
+  </div>
 
-    {% comment %} <h1>Unpaid Invoices</h1>
-    {%for invoice in unpaid_invoices%}
-    {{invoice.invoice_number}}-
-    {{invoice.cust_name}}-
-    {{invoice.amount}}-
-    {%endfor%} {% endcomment %}
+  <div class="mt-6 overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Invoice</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Customer</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Amount</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 bg-white">
+        {% for invoice in all_invoices %}
+        <tr class="transition hover:bg-slate-50">
+          <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ invoice.invoice_number }}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">{{ invoice.cust_name }}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">₹{{ invoice.amount }}</td>
+          <td class="px-6 py-4">
+            {% if invoice.is_paid %}
+              <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-600">Paid</span>
+            {% else %}
+              <span class="inline-flex rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-600">Pending</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-4">
+            <a href="{% url 'show_invoice' %}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600">
+              <i data-lucide="eye" class="h-4 w-4"></i>
+              <span>View</span>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-500">No invoices available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+    <p>Showing {{ all_invoices|length }} invoice entries</p>
+    <div class="flex items-center gap-2">
+      <button class="rounded-full border border-slate-200 px-3 py-2 transition hover:border-indigo-200 hover:text-indigo-600">Previous</button>
+      <button class="rounded-full bg-indigo-600 px-3 py-2 text-white transition hover:bg-indigo-700">1</button>
+      <button class="rounded-full border border-slate-200 px-3 py-2 transition hover:border-indigo-200 hover:text-indigo-600">Next</button>
+    </div>
+  </div>
+</div>
 {% endblock %}

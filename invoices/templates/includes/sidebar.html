@@ -1,49 +1,41 @@
-<aside class="w-64 min-h-screen bg-slate-900 text-white fixed">
-
-    <div class="p-6 border-b border-slate-700">
-        <h1 class="text-2xl font-bold text-indigo-400">
-            InvoiceMS
-        </h1>
+<div class="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
+  <div class="flex items-center gap-3 px-2 py-2">
+    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
+      <i data-lucide="receipt" class="h-5 w-5"></i>
     </div>
+    <div>
+      <p class="text-base font-semibold text-slate-900">InvoiceMS</p>
+      <p class="text-sm text-slate-500">Operations Hub</p>
+    </div>
+  </div>
 
-    <nav class="mt-6">
+  <nav class="mt-8 space-y-2">
+    <a href="{% url 'dashboard' %}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition {% if request.path == '/dashboard/' %}bg-indigo-600 text-white shadow-lg shadow-indigo-600/20{% else %}text-slate-600 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
+      <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+      <span>Dashboard</span>
+    </a>
 
-        <a href="{% url 'dashboard' %}"
-        class="flex items-center gap-3 px-6 py-3 rounded-lg mx-3 bg-indigo-600 text-white">
+    <a href="{% url 'invoice' %}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition {% if 'invoice' in request.path %}bg-indigo-600 text-white shadow-lg shadow-indigo-600/20{% else %}text-slate-600 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
+      <i data-lucide="file-text" class="h-4 w-4"></i>
+      <span>Invoices</span>
+    </a>
 
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-            <span>Dashboard</span>
+    <a href="#" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600">
+      <i data-lucide="user-circle" class="h-4 w-4"></i>
+      <span>Profile</span>
+    </a>
 
-        </a>
+    <form action="{% url 'logout' %}" method="post" class="mt-2">
+      {% csrf_token %}
+      <button type="submit" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600">
+        <i data-lucide="log-out" class="h-4 w-4"></i>
+        <span>Logout</span>
+      </button>
+    </form>
+  </nav>
 
-        <a href="{% url 'show_invoices' %}"
-        class="flex items-center gap-3 px-6 py-3 rounded-lg mx-3 hover:bg-slate-800 transition">
-
-            <i data-lucide="receipt" class="w-5 h-5"></i>
-            <span>Invoices</span>
-
-        </a>
-
-        <a href="#"
-        class="flex items-center gap-3 px-6 py-3 rounded-lg mx-3 hover:bg-slate-800 transition">
-
-            <i data-lucide="user" class="w-5 h-5"></i>
-            <span>Profile</span>
-
-        </a>
-
-        <form action="{% url 'logout' %}" method="post" class="mx-3 mt-6">
-            {% csrf_token %}
-
-            <button type="submit"
-                    class="w-full flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-red-600 transition">
-
-                <i data-lucide="log-out" class="w-5 h-5"></i>
-                <span>Logout</span>
-
-            </button>
-        </form>
-
-    </nav>
-
-</aside>
+  <div class="mt-auto rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+    <p class="text-sm font-semibold text-slate-900">Need a polished billing flow?</p>
+    <p class="mt-1 text-sm text-slate-600">Keep your invoices organized without leaving the dashboard.</p>
+  </div>
+</div>
