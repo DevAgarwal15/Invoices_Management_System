@@ -3,12 +3,26 @@ from .models import Invoice
 from .forms import InvoiceForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 # Create your views here.
 
+
+
 @login_required
 def dashboard(request):
-    return render(request, "dashboard.html")
+    invoices = Invoice.objects.filter(owner=request.user)
+    recent_invoices = invoices.order_by("-date_created")[:5]
+
+    context = {
+        "total_invoices": invoices.count(),
+        "paid_invoices": invoices.filter(is_paid=True).count(),
+        "pending_invoices": invoices.filter(is_paid=False).count(),
+        "total_revenue": invoices.aggregate(total=Sum("amount"))["total"] or 0,
+        "recent_invoices": recent_invoices,
+    }
+
+    return render(request, "dashboard.html", context)
 
 def home(request):
     return render(request, 'home.html')
