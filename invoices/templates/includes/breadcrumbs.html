@@ -1,5 +1,16 @@
-<div class="flex items-center gap-2 text-sm text-slate-500">
-  <a href="{% url 'dashboard' %}" class="transition hover:text-indigo-600">Dashboard</a>
-  <span>/</span>
-  <span class="font-medium text-slate-700">Overview</span>
-</div>
+<nav class="flex items-center gap-1.5 text-sm text-zinc-500" aria-label="Breadcrumb">
+  <a href="{% url 'dashboard' %}" class="transition duration-200 hover:text-brand-600">Dashboard</a>
+  {% if crumbs %}
+    {% for crumb in crumbs %}
+      <i data-lucide="chevron-right" class="h-3.5 w-3.5 text-zinc-300"></i>
+      {% if crumb.url %}
+        <a href="{{ crumb.url }}" class="transition duration-200 hover:text-brand-600">{{ crumb.label }}</a>
+      {% else %}
+        <span class="font-medium text-zinc-700">{{ crumb.label }}</span>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <i data-lucide="chevron-right" class="h-3.5 w-3.5 text-zinc-300"></i>
+    <span class="font-medium text-zinc-700">{{ current|default:"Overview" }}</span>
+  {% endif %}
+</nav>

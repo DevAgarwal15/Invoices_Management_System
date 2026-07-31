@@ -1,1 +1,177 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #f5f3ff;
+  --color-brand-100: #ede9fe;
+  --color-brand-200: #ddd6fe;
+  --color-brand-300: #c4b5fd;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
+  --color-brand-900: #4c1d95;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-fade-in-up: fade-in-up 0.55s ease-out forwards;
+  --animate-slide-in-left: slide-in-left 0.4s ease-out forwards;
+  --animate-scale-in: scale-in 0.35s ease-out forwards;
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-sans text-zinc-900;
+  }
+
+  form p {
+    @apply space-y-2;
+  }
+
+  form label {
+    @apply block text-sm font-medium text-zinc-700;
+  }
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"],
+  form input[type="number"],
+  form input[type="search"],
+  form select,
+  form textarea {
+    @apply w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 shadow-sm transition duration-200 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+  }
+
+  form input[type="checkbox"] {
+    @apply h-4 w-4 rounded border-zinc-300 text-brand-600 focus:ring-brand-500/20;
+  }
+
+  form ul.errorlist {
+    @apply mt-1 list-none space-y-1 text-sm text-red-600;
+  }
+
+  form .helptext {
+    @apply mt-1 text-xs text-zinc-500;
+  }
+}
+
+@layer components {
+  .glass-nav {
+    @apply border-b border-zinc-200/60 bg-white/70 backdrop-blur-xl backdrop-saturate-150;
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-zinc-200/80 bg-white shadow-sm;
+  }
+
+  .gradient-hero {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(99, 102, 241, 0.08), transparent),
+      linear-gradient(to bottom, #fafafa, #ffffff);
+  }
+
+  .gradient-mesh {
+    background:
+      radial-gradient(at 27% 37%, rgba(124, 58, 237, 0.08) 0, transparent 50%),
+      radial-gradient(at 97% 21%, rgba(99, 102, 241, 0.06) 0, transparent 50%),
+      radial-gradient(at 52% 99%, rgba(167, 139, 250, 0.05) 0, transparent 50%),
+      #fafafa;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand-600/25 transition duration-200 hover:bg-brand-700 hover:shadow-md hover:shadow-brand-600/30 active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition duration-200 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-zinc-600 transition duration-200 hover:bg-zinc-100 hover:text-zinc-900;
+  }
+
+  .nav-link {
+    @apply relative text-sm font-medium text-zinc-600 transition duration-200 hover:text-brand-600;
+  }
+
+  .nav-link-active {
+    @apply text-brand-600;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition duration-200 hover:bg-zinc-800/80 hover:text-white;
+  }
+
+  .sidebar-link-active {
+    @apply bg-brand-600/20 text-white ring-1 ring-brand-500/30;
+  }
+
+  .table-header {
+    @apply px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500;
+  }
+
+  .table-cell {
+    @apply px-5 py-4 text-sm text-zinc-600;
+  }
+
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.3s; }
+
+  .animate-on-load {
+    opacity: 0;
+  }
+}

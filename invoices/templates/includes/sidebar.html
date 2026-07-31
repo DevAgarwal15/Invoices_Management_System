@@ -1,41 +1,78 @@
-<div class="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
-  <div class="flex items-center gap-3 px-2 py-2">
-    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
-      <i data-lucide="receipt" class="h-5 w-5"></i>
-    </div>
-    <div>
-      <p class="text-base font-semibold text-slate-900">InvoiceMS</p>
-      <p class="text-sm text-slate-500">Operations Hub</p>
-    </div>
+{% with url_name=request.resolver_match.url_name|default:"" %}
+<aside id="sidebar"
+       class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-zinc-800/50 bg-zinc-950 transition-transform duration-300 ease-in-out lg:translate-x-0">
+
+  <!-- Logo -->
+  <div class="flex h-16 items-center justify-between border-b border-zinc-800/80 px-5">
+    <a href="{% url 'dashboard' %}" class="flex items-center gap-2.5">
+      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <i data-lucide="receipt" class="h-4 w-4"></i>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-white">InvoiceMS</p>
+        <p class="text-[10px] font-medium text-zinc-500">Workspace</p>
+      </div>
+    </a>
+    <button id="sidebar-close" type="button" class="rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-800 hover:text-white lg:hidden" aria-label="Close sidebar">
+      <i data-lucide="x" class="h-5 w-5"></i>
+    </button>
   </div>
 
-  <nav class="mt-8 space-y-2">
-    <a href="{% url 'dashboard' %}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition {% if request.path == '/dashboard/' %}bg-indigo-600 text-white shadow-lg shadow-indigo-600/20{% else %}text-slate-600 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
-      <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
-      <span>Dashboard</span>
+  <!-- Navigation -->
+  <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+    <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Main</p>
+
+    <a href="{% url 'dashboard' %}"
+       class="sidebar-link {% if url_name == 'dashboard' %}sidebar-link-active{% endif %}">
+      <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i>
+      Dashboard
     </a>
 
-    <a href="{% url 'invoice' %}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition {% if 'invoice' in request.path %}bg-indigo-600 text-white shadow-lg shadow-indigo-600/20{% else %}text-slate-600 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
-      <i data-lucide="file-text" class="h-4 w-4"></i>
-      <span>Invoices</span>
+    <a href="{% url 'invoice' %}"
+       class="sidebar-link {% if url_name == 'invoice' %}sidebar-link-active{% endif %}">
+      <i data-lucide="file-text" class="h-4 w-4 shrink-0"></i>
+      Invoices
     </a>
 
-    <a href="#" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600">
-      <i data-lucide="user-circle" class="h-4 w-4"></i>
-      <span>Profile</span>
+    <a href="{% url 'add_invoice' %}"
+       class="sidebar-link {% if url_name == 'add_invoice' %}sidebar-link-active{% endif %}">
+      <i data-lucide="plus-circle" class="h-4 w-4 shrink-0"></i>
+      New Invoice
     </a>
 
-    <form action="{% url 'logout' %}" method="post" class="mt-2">
-      {% csrf_token %}
-      <button type="submit" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600">
-        <i data-lucide="log-out" class="h-4 w-4"></i>
-        <span>Logout</span>
-      </button>
-    </form>
+    <p class="mb-2 mt-6 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Account</p>
+
+    <a href="#" class="sidebar-link">
+      <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
+      Settings
+    </a>
+
+    <a href="#" class="sidebar-link">
+      <i data-lucide="help-circle" class="h-4 w-4 shrink-0"></i>
+      Help
+    </a>
   </nav>
 
-  <div class="mt-auto rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
-    <p class="text-sm font-semibold text-slate-900">Need a polished billing flow?</p>
-    <p class="mt-1 text-sm text-slate-600">Keep your invoices organized without leaving the dashboard.</p>
+  <!-- User footer -->
+  <div class="border-t border-zinc-800/80 p-4">
+    <div class="mb-3 flex items-center gap-3 rounded-xl bg-zinc-900/80 px-3 py-2.5 ring-1 ring-zinc-800">
+      <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-xs font-bold text-white">
+        {{ request.user.username|first|upper }}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium text-white">{{ request.user.username }}</p>
+        <p class="truncate text-[11px] text-zinc-500">Account owner</p>
+      </div>
+    </div>
+
+    <form method="POST" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit"
+              class="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-400 transition duration-200 hover:border-red-900/50 hover:bg-red-950/30 hover:text-red-400">
+        <i data-lucide="log-out" class="h-4 w-4"></i>
+        Sign out
+      </button>
+    </form>
   </div>
-</div>
+</aside>
+{% endwith %}

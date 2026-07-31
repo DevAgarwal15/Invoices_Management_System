@@ -1,30 +1,36 @@
-<div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
-  <div class="flex flex-col gap-4 border-b border-slate-200 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+<div class="animate-on-load animate-fade-in-up glass-card overflow-hidden">
+  <div class="flex flex-col gap-4 border-b border-zinc-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h3 class="text-lg font-semibold text-slate-900">{{ title }}</h3>
-      <p class="text-sm text-slate-500">{{ subtitle }}</p>
+      <h3 class="text-base font-semibold text-zinc-900">{{ title }}</h3>
+      {% if subtitle %}<p class="mt-1 text-sm text-zinc-500">{{ subtitle }}</p>{% endif %}
     </div>
-    <div class="flex items-center gap-3">
-      <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
-        <i data-lucide="search" class="h-4 w-4"></i>
-        <span>Search</span>
+    {% if show_search %}
+    <div class="flex items-center gap-2">
+      <div class="relative">
+        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"></i>
+        <input type="search" placeholder="Search..."
+               class="rounded-xl border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-4 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20">
       </div>
-      <button class="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600">Filter</button>
+      <button type="button" class="btn-secondary !py-2 !px-3.5 text-xs">
+        <i data-lucide="sliders-horizontal" class="h-3.5 w-3.5"></i>
+        Filter
+      </button>
     </div>
+    {% endif %}
   </div>
 
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200">
-      <thead class="bg-slate-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Invoice</th>
-          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Customer</th>
-          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Amount</th>
-          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</th>
-          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Action</th>
+    <table class="min-w-full">
+      <thead>
+        <tr class="border-b border-zinc-100 bg-zinc-50/50">
+          <th class="table-header">Invoice</th>
+          <th class="table-header">Customer</th>
+          <th class="table-header">Amount</th>
+          <th class="table-header">Status</th>
+          {% if show_actions %}<th class="table-header text-right">Action</th>{% endif %}
         </tr>
       </thead>
-      <tbody class="divide-y divide-slate-100 bg-white">
+      <tbody class="divide-y divide-zinc-100">
         {{ rows }}
       </tbody>
     </table>

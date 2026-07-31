@@ -1,0 +1,11 @@
+<div class="glass-card {{ class|default:'' }} {% if hover %}transition duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-200/50{% endif %}">
+  {% if title or subtitle %}
+  <div class="border-b border-zinc-100 px-6 py-5">
+    {% if title %}<h3 class="text-base font-semibold text-zinc-900">{{ title }}</h3>{% endif %}
+    {% if subtitle %}<p class="mt-1 text-sm text-zinc-500">{{ subtitle }}</p>{% endif %}
+  </div>
+  {% endif %}
+  <div class="{% if title or subtitle %}p-6{% else %}p-6{% endif %}">
+    {{ content }}
+  </div>
+</div>

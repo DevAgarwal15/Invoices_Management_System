@@ -1,9 +1,41 @@
-{%extends 'base.html'%}
-{%block content%}
-<h1>Add New Invoice</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Save Invoice</button>
-</form>
-{%endblock%}
+{% extends 'dashboard_base.html' %}
+{% block title %}New Invoice — InvoiceMS{% endblock %}
+{% block topbar %}
+  {% include "includes/topbar.html" with page_title="New Invoice" %}
+{% endblock %}
+{% block dashboard_content %}
+
+{% include "includes/breadcrumbs.html" with current="New Invoice" %}
+
+<div class="mx-auto max-w-2xl">
+  <div class="animate-on-load animate-fade-in-up glass-card overflow-hidden shadow-xl shadow-zinc-200/40">
+    <div class="border-b border-zinc-100 px-6 py-6 sm:px-8">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-600/30">
+          <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Create invoice</h2>
+          <p class="text-sm text-zinc-500">Invoice number will be generated automatically</p>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" class="space-y-5 px-6 py-6 sm:px-8">
+      {% csrf_token %}
+      {% for field in form %}
+        {% include "includes/components/form_field.html" with field=field %}
+      {% endfor %}
+
+      <div class="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:justify-end">
+        <a href="{% url 'invoice' %}" class="btn-secondary text-center">Cancel</a>
+        <button type="submit" class="btn-primary">
+          <i data-lucide="save" class="h-4 w-4"></i>
+          Save invoice
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

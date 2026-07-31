@@ -1,0 +1,13 @@
+{% if href %}
+<a href="{{ href }}"
+   class="{% if variant == 'secondary' %}btn-secondary{% elif variant == 'ghost' %}btn-ghost{% elif variant == 'danger' %}inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-red-700 active:scale-[0.98]{% else %}btn-primary{% endif %} {{ class|default:'' }}">
+  {% if icon %}<i data-lucide="{{ icon }}" class="h-4 w-4"></i>{% endif %}
+  {{ label }}
+</a>
+{% else %}
+<button type="{{ type|default:'button' }}"
+        class="{% if variant == 'secondary' %}btn-secondary{% elif variant == 'ghost' %}btn-ghost{% elif variant == 'danger' %}inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-red-700 active:scale-[0.98]{% else %}btn-primary{% endif %} {{ class|default:'' }}">
+  {% if icon %}<i data-lucide="{{ icon }}" class="h-4 w-4"></i>{% endif %}
+  {{ label }}
+</button>
+{% endif %}

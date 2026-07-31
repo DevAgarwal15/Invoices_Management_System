@@ -1,0 +1,9 @@
+<span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium
+  {% if variant == 'success' %}bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10
+  {% elif variant == 'warning' %}bg-amber-50 text-amber-700 ring-1 ring-amber-600/10
+  {% elif variant == 'brand' %}bg-brand-50 text-brand-700 ring-1 ring-brand-600/10
+  {% elif variant == 'neutral' %}bg-zinc-100 text-zinc-600 ring-1 ring-zinc-500/10
+  {% else %}bg-zinc-100 text-zinc-600 ring-1 ring-zinc-500/10{% endif %}">
+  {% if icon %}<i data-lucide="{{ icon }}" class="h-3 w-3"></i>{% endif %}
+  {{ label }}
+</span>

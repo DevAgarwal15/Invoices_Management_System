@@ -1,53 +1,66 @@
 {% extends "dashboard_base.html" %}
+{% block title %}Dashboard — InvoiceMS{% endblock %}
 {% block dashboard_content %}
-<div class="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+
+{% include "includes/breadcrumbs.html" with current="Overview" %}
+
+<div class="grid gap-6 xl:grid-cols-[1fr_320px]">
   <div class="space-y-6">
-    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {% include "includes/stats_card.html" with title="Total Invoices" value=total_invoices icon="file-text" %}
-      {% include "includes/stats_card.html" with title="Paid Invoices" value=paid_invoices icon="check-circle-2" %}
-      {% include "includes/stats_card.html" with title="Pending Invoices" value=pending_invoices icon="clock-3" %}
-      {% include "includes/stats_card.html" with title="Total Revenue" value=total_revenue prefix="₹" icon="banknote" %}
+      {% include "includes/stats_card.html" with title="Paid" value=paid_invoices icon="check-circle-2" change="On track" change_positive=True change_icon="trending-up" %}
+      {% include "includes/stats_card.html" with title="Pending" value=pending_invoices icon="clock-3" %}
+      {% include "includes/stats_card.html" with title="Revenue" value=total_revenue prefix="₹" icon="banknote" %}
     </div>
 
-    <div class="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
-      <div class="flex flex-col gap-4 border-b border-slate-200 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="animate-on-load animate-fade-in-up glass-card overflow-hidden">
+      <div class="flex flex-col gap-3 border-b border-zinc-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 class="text-lg font-semibold text-slate-900">Recent invoices</h2>
-          <p class="text-sm text-slate-500">Latest activity across your billing workspace.</p>
+          <h2 class="text-base font-semibold text-zinc-900">Recent invoices</h2>
+          <p class="text-sm text-zinc-500">Latest activity in your workspace</p>
         </div>
-        <a href="{% url 'invoice' %}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600">
-          <span>View all</span>
-          <i data-lucide="arrow-right" class="h-4 w-4"></i>
+        <a href="{% url 'invoice' %}" class="btn-ghost !px-3 !py-2 text-xs">
+          View all
+          <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
         </a>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200">
-          <thead class="bg-slate-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Invoice</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Customer</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Amount</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</th>
+        <table class="min-w-full">
+          <thead>
+            <tr class="border-b border-zinc-100 bg-zinc-50/50">
+              <th class="table-header">Invoice</th>
+              <th class="table-header">Customer</th>
+              <th class="table-header">Amount</th>
+              <th class="table-header">Status</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 bg-white">
+          <tbody class="divide-y divide-zinc-100">
             {% for invoice in recent_invoices %}
-            <tr class="transition hover:bg-slate-50">
-              <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ invoice.invoice_number }}</td>
-              <td class="px-6 py-4 text-sm text-slate-600">{{ invoice.cust_name }}</td>
-              <td class="px-6 py-4 text-sm text-slate-600">₹{{ invoice.amount }}</td>
-              <td class="px-6 py-4">
-                {% if invoice.is_paid %}
-                  <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-600">Paid</span>
-                {% else %}
-                  <span class="inline-flex rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-600">Pending</span>
-                {% endif %}
+            <tr class="transition duration-150 hover:bg-zinc-50/80">
+              <td class="table-cell font-medium text-zinc-900">{{ invoice.invoice_number }}</td>
+              <td class="table-cell">{{ invoice.cust_name }}</td>
+              <td class="table-cell font-medium text-zinc-900">₹{{ invoice.amount }}</td>
+              <td class="table-cell">
+                {% include "includes/components/status_badge.html" with is_paid=invoice.is_paid %}
               </td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="4" class="px-6 py-8 text-center text-sm text-slate-500">No invoices found yet.</td>
+              <td colspan="4" class="px-5 py-12 text-center">
+                <div class="mx-auto flex max-w-xs flex-col items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
+                    <i data-lucide="inbox" class="h-6 w-6"></i>
+                  </div>
+                  <p class="text-sm font-medium text-zinc-600">No invoices yet</p>
+                  <p class="text-xs text-zinc-400">Create your first invoice to get started</p>
+                  <a href="{% url 'add_invoice' %}" class="btn-primary mt-1 !py-2 !px-4 text-xs">
+                    <i data-lucide="plus" class="h-3.5 w-3.5"></i>
+                    New invoice
+                  </a>
+                </div>
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -56,38 +69,44 @@
     </div>
   </div>
 
-  <div class="space-y-6">
-    <div class="rounded-[28px] border border-slate-200 bg-gradient-to-br from-indigo-600 to-indigo-700 p-6 text-white shadow-[0_20px_45px_-24px_rgba(79,70,229,0.55)]">
-      <p class="text-sm font-medium text-indigo-100">Quick actions</p>
-      <h3 class="mt-3 text-2xl font-semibold">Keep the billing flow moving.</h3>
-      <p class="mt-3 text-sm leading-6 text-indigo-100">Review outstanding invoices, confirm payment status, and open the full list in seconds.</p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <a href="{% url 'invoice' %}" class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-slate-50">Open invoices</a>
-        <a href="{% url 'dashboard' %}" class="rounded-full border border-white/30 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">Refresh view</a>
+  <div class="space-y-5">
+    <div class="animate-on-load animate-fade-in-up overflow-hidden rounded-2xl bg-zinc-950 p-6 text-white ring-1 ring-zinc-800">
+      <p class="text-xs font-semibold uppercase tracking-widest text-brand-400">Quick actions</p>
+      <h3 class="mt-3 text-lg font-semibold tracking-tight">Keep billing moving</h3>
+      <p class="mt-2 text-sm leading-6 text-zinc-400">Review outstanding invoices and confirm payment status in seconds.</p>
+      <div class="mt-5 flex flex-col gap-2">
+        <a href="{% url 'add_invoice' %}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-500">
+          <i data-lucide="plus" class="h-4 w-4"></i>
+          New invoice
+        </a>
+        <a href="{% url 'invoice' %}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 px-4 py-2.5 text-sm font-semibold text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-900">
+          View ledger
+        </a>
       </div>
     </div>
 
-    <div class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_45px_-24px_rgba(15,23,42,0.35)]">
+    <div class="animate-on-load animate-fade-in-up glass-card p-5">
       <div class="flex items-center gap-3">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
-          <i data-lucide="user-circle" class="h-6 w-6"></i>
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-sm font-bold text-white">
+          {{ user.username|first|upper }}
         </div>
         <div>
-          <p class="font-semibold text-slate-900">{{ user.username }}</p>
-          <p class="text-sm text-slate-500">Account owner</p>
+          <p class="text-sm font-semibold text-zinc-900">{{ user.username }}</p>
+          <p class="text-xs text-zinc-500">Account owner</p>
         </div>
       </div>
-      <div class="mt-6 space-y-3 text-sm text-slate-600">
-        <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-          <span>Current status</span>
-          <span class="font-semibold text-emerald-600">Active</span>
+      <div class="mt-4 space-y-2">
+        <div class="flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3 text-sm">
+          <span class="text-zinc-500">Status</span>
+          {% include "includes/components/badge.html" with label="Active" variant="success" %}
         </div>
-        <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-          <span>Pending items</span>
-          <span class="font-semibold text-slate-900">{{ pending_invoices }}</span>
+        <div class="flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3 text-sm">
+          <span class="text-zinc-500">Pending items</span>
+          <span class="font-semibold text-zinc-900">{{ pending_invoices }}</span>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

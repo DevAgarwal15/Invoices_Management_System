@@ -1,21 +1,31 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvoiceMS | Modern Billing</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-  </head>
-  <body class="bg-slate-50 text-slate-900">
-    {% include 'includes/navbar.html' %}
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}InvoiceMS — Modern Billing{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-full bg-zinc-50 text-zinc-900 antialiased">
+  {% include 'includes/navbar.html' %}
+  <main>
+    {% include 'includes/alerts.html' %}
     {% block content %}{% endblock %}
-    {% include 'includes/footer.html' %}
+  </main>
+  {% include 'includes/footer.html' %}
 
-    <script>
-      lucide.createIcons();
-    </script>
-  </body>
+  <script>
+    lucide.createIcons();
+    document.querySelectorAll('.animate-on-load').forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.06}s`;
+    });
+  </script>
+  {% block extra_scripts %}{% endblock %}
+</body>
 </html>
-

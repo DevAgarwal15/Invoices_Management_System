@@ -1,0 +1,5 @@
+{% if is_paid %}
+  {% include "includes/components/badge.html" with label="Paid" variant="success" icon="check-circle-2" %}
+{% else %}
+  {% include "includes/components/badge.html" with label="Pending" variant="warning" icon="clock-3" %}
+{% endif %}
