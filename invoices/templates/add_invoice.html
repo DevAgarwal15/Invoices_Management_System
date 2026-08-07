@@ -1,5 +1,5 @@
 {% extends 'dashboard_base.html' %}
-{% block title %}New Invoice — InvoiceMS{% endblock %}
+{% block title %}New Invoice — ENV_BILLING{% endblock %}
 {% block topbar %}
   {% include "includes/topbar.html" with page_title="New Invoice" %}
 {% endblock %}
@@ -21,8 +21,11 @@
       </div>
     </div>
 
-    <form method="POST" class="space-y-5 px-6 py-6 sm:px-8">
+    <form method="POST" class="space-y-5 px-6 py-6 sm:px-8" novalidate>
       {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ form.non_field_errors }}</div>
+      {% endif %}
       {% for field in form %}
         {% include "includes/components/form_field.html" with field=field %}
       {% endfor %}

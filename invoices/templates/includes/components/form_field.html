@@ -1,9 +1,16 @@
-<div class="space-y-2">
-  <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-zinc-700">
-    {{ field.label }}
-    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
-  </label>
-  {{ field }}
+<div class="space-y-2 {% if field.field.widget.input_type == 'checkbox' %}rounded-xl border border-zinc-200 bg-zinc-50/60 p-4{% endif %}">
+  {% if field.field.widget.input_type == 'checkbox' %}
+    <label for="{{ field.id_for_label }}" class="flex cursor-pointer items-center gap-3 text-sm font-medium text-zinc-700">
+      {{ field }}
+      <span>{{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}</span>
+    </label>
+  {% else %}
+    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-zinc-700">
+      {{ field.label }}
+      {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+    </label>
+    {{ field }}
+  {% endif %}
   {% if field.help_text %}
   <p class="text-xs text-zinc-500">{{ field.help_text|safe }}</p>
   {% endif %}

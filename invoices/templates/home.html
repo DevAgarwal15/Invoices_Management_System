@@ -38,70 +38,19 @@
       </div>
     </div>
 
-    <!-- Dashboard preview -->
-    <div class="animate-on-load animate-fade-in-up stagger-5 relative mx-auto mt-16 max-w-4xl">
-      <div class="absolute -inset-4 rounded-3xl bg-gradient-to-r from-brand-500/20 via-indigo-500/10 to-brand-500/20 blur-2xl"></div>
-      <div class="relative overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-2xl shadow-zinc-300/30">
-        <div class="flex items-center gap-2 border-b border-zinc-100 bg-zinc-50/80 px-4 py-3">
-          <span class="h-2.5 w-2.5 rounded-full bg-red-400"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
-          <span class="ml-3 text-xs font-medium text-zinc-400">app.invoicems.io/dashboard</span>
-        </div>
-        <div class="grid gap-4 p-6 sm:grid-cols-3">
-          <div class="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-            <p class="text-xs font-medium text-zinc-500">Total Invoices</p>
-            <p class="mt-1 text-2xl font-semibold text-zinc-900">128</p>
-          </div>
-          <div class="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-            <p class="text-xs font-medium text-zinc-500">Paid</p>
-            <p class="mt-1 text-2xl font-semibold text-emerald-600">96</p>
-          </div>
-          <div class="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-            <p class="text-xs font-medium text-zinc-500">Pending</p>
-            <p class="mt-1 text-2xl font-semibold text-amber-600">32</p>
-          </div>
-        </div>
-        <div class="space-y-2 border-t border-zinc-100 px-6 pb-6">
-          <div class="flex items-center justify-between rounded-xl border border-zinc-100 px-4 py-3 transition hover:bg-zinc-50">
-            <div>
-              <p class="text-sm font-medium text-zinc-900">INV-000121</p>
-              <p class="text-xs text-zinc-500">Northstar Studio · ₹12,500</p>
-            </div>
-            <span class="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">Paid</span>
-          </div>
-          <div class="flex items-center justify-between rounded-xl border border-zinc-100 px-4 py-3 transition hover:bg-zinc-50">
-            <div>
-              <p class="text-sm font-medium text-zinc-900">INV-000122</p>
-              <p class="text-xs text-zinc-500">Blue Peak Labs · ₹8,200</p>
-            </div>
-            <span class="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Pending</span>
-          </div>
-        </div>
-      </div>
+    <div class="animate-on-load animate-fade-in-up stagger-5 mx-auto mt-16 grid max-w-4xl gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm"><i data-lucide="file-plus-2" class="h-5 w-5 text-brand-600"></i><p class="mt-4 text-sm font-semibold text-zinc-900">Create records</p><p class="mt-1 text-xs leading-5 text-zinc-500">Capture customers, amounts, and payment state in one form.</p></div>
+      <div class="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm"><i data-lucide="search" class="h-5 w-5 text-brand-600"></i><p class="mt-4 text-sm font-semibold text-zinc-900">Find quickly</p><p class="mt-1 text-xs leading-5 text-zinc-500">Search your own ledger by invoice number or customer.</p></div>
+      <div class="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm"><i data-lucide="printer" class="h-5 w-5 text-brand-600"></i><p class="mt-4 text-sm font-semibold text-zinc-900">Share clearly</p><p class="mt-1 text-xs leading-5 text-zinc-500">Open a professional invoice document and print it when needed.</p></div>
     </div>
   </div>
 </section>
 
-<!-- Stats bar -->
 <section class="border-y border-zinc-200/80 bg-white">
-  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
-    <div class="animate-on-load animate-fade-in-up text-center">
-      <p class="text-3xl font-semibold tracking-tight text-zinc-900">10K+</p>
-      <p class="mt-1 text-sm text-zinc-500">Invoices managed</p>
-    </div>
-    <div class="animate-on-load animate-fade-in-up text-center">
-      <p class="text-3xl font-semibold tracking-tight text-zinc-900">2K+</p>
-      <p class="mt-1 text-sm text-zinc-500">Active teams</p>
-    </div>
-    <div class="animate-on-load animate-fade-in-up text-center">
-      <p class="text-3xl font-semibold tracking-tight text-zinc-900">99.9%</p>
-      <p class="mt-1 text-sm text-zinc-500">Uptime</p>
-    </div>
-    <div class="animate-on-load animate-fade-in-up text-center">
-      <p class="text-3xl font-semibold tracking-tight text-zinc-900">24/7</p>
-      <p class="mt-1 text-sm text-zinc-500">Support</p>
-    </div>
+  <div class="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:grid-cols-3 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-3 text-sm text-zinc-600"><i data-lucide="lock-keyhole" class="h-5 w-5 text-brand-600"></i>Authenticated workspaces</div>
+    <div class="flex items-center gap-3 text-sm text-zinc-600"><i data-lucide="hash" class="h-5 w-5 text-brand-600"></i>Automatic invoice numbering</div>
+    <div class="flex items-center gap-3 text-sm text-zinc-600"><i data-lucide="smartphone" class="h-5 w-5 text-brand-600"></i>Responsive ledger access</div>
   </div>
 </section>
 

@@ -102,6 +102,10 @@
   form .helptext {
     @apply mt-1 text-xs text-zinc-500;
   }
+
+  @media print {
+    .no-print { display: none !important; }
+  }
 }
 
 @layer components {

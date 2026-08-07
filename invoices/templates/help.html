@@ -1,0 +1,17 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Help — ENV_BILLING{% endblock %}
+{% block topbar %}{% include "includes/topbar.html" with page_title="Help" %}{% endblock %}
+{% block dashboard_content %}
+{% include "includes/breadcrumbs.html" with current="Help" %}
+<div class="mx-auto max-w-3xl space-y-5">
+  <div class="glass-card overflow-hidden">
+    <div class="border-b border-zinc-100 px-6 py-6 sm:px-8"><p class="text-xs font-semibold uppercase tracking-widest text-brand-600">Guidance</p><h2 class="mt-2 text-xl font-semibold tracking-tight text-zinc-900">Using ENV_BILLING</h2><p class="mt-1 text-sm text-zinc-500">A quick reference for the billing workflow.</p></div>
+    <div class="divide-y divide-zinc-100">
+      <div class="flex gap-4 px-6 py-5 sm:px-8"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-sm font-bold text-brand-600">1</span><div><h3 class="text-sm font-semibold text-zinc-900">Create an invoice</h3><p class="mt-1 text-sm leading-6 text-zinc-500">Open New Invoice, enter the customer, amount, and payment status, then save. The invoice number is generated automatically.</p></div></div>
+      <div class="flex gap-4 px-6 py-5 sm:px-8"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-sm font-bold text-brand-600">2</span><div><h3 class="text-sm font-semibold text-zinc-900">Find and view invoices</h3><p class="mt-1 text-sm leading-6 text-zinc-500">Use the invoice ledger search for an invoice number or customer name. Select View to open the protected invoice document.</p></div></div>
+      <div class="flex gap-4 px-6 py-5 sm:px-8"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-sm font-bold text-brand-600">3</span><div><h3 class="text-sm font-semibold text-zinc-900">Understand payment status</h3><p class="mt-1 text-sm leading-6 text-zinc-500">Paid invoices are complete. Pending invoices still require payment follow-up. Use the status filter to narrow the ledger.</p></div></div>
+    </div>
+  </div>
+  <div class="glass-card p-6 sm:p-8"><h2 class="text-base font-semibold text-zinc-900">FAQ</h2><div class="mt-4 space-y-4 text-sm"><p><strong class="text-zinc-900">Can I edit an invoice?</strong><br><span class="text-zinc-500">Editing is not available in the current workflow. Create a new record if the original contains an error.</span></p><p><strong class="text-zinc-900">Who can see my invoices?</strong><br><span class="text-zinc-500">Only the authenticated owner of an invoice can view it in the application.</span></p></div></div>
+</div>
+{% endblock %}

@@ -1,9 +1,13 @@
-{%extends 'base.html'%}
-{%block content%}
-{%for invoice in unpaid_invoices%}
-{{invoice.cust_name}}--
-{{invoice.invoice_number}}--
-{{invoice.amount}}--
-{{invoice.date_created}}--
-{%endfor%}
-{%endblock%}
+{% extends "dashboard_base.html" %}
+{% block title %}Pending Invoices — ENV_BILLING{% endblock %}
+{% block topbar %}{% include "includes/topbar.html" with page_title="Pending invoices" %}{% endblock %}
+{% block dashboard_content %}
+{% include "includes/breadcrumbs.html" with current="Pending invoices" %}
+<div class="animate-on-load animate-fade-in-up glass-card overflow-hidden">
+	<div class="flex flex-col gap-4 border-b border-zinc-100 px-6 py-5 lg:flex-row lg:items-end lg:justify-between">
+		<div><div class="flex items-center gap-2"><span class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"><i data-lucide="clock-3" class="h-4 w-4"></i></span><h2 class="text-lg font-semibold tracking-tight text-zinc-900">Pending invoices</h2></div><p class="mt-2 text-sm text-zinc-500">{{ page_obj.paginator.count }} invoice{{ page_obj.paginator.count|pluralize }} awaiting payment in your workspace.</p></div>
+		<form method="get" class="flex w-full gap-2 sm:w-auto"><label for="pending-search" class="sr-only">Search pending invoices</label><input id="pending-search" type="search" name="q" value="{{ query }}" placeholder="Invoice or customer" class="min-w-0 flex-1 !py-2 text-xs sm:w-52"><input type="hidden" name="status" value="pending"><button type="submit" class="btn-secondary !px-3 !py-2 text-xs" aria-label="Search pending invoices"><i data-lucide="search" class="h-3.5 w-3.5"></i><span class="hidden sm:inline">Search</span></button></form>
+	</div>
+	{% include "includes/invoice_table.html" %}
+</div>
+{% endblock %}
