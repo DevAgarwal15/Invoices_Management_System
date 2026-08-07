@@ -3,7 +3,7 @@
     <div>
       <p class="text-xs font-medium uppercase tracking-wider text-zinc-500">{{ title }}</p>
       <p class="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
-        {{ prefix }}{{ value }}
+        {% if prefix %}{{ prefix }}{{ value|floatformat:2 }}{% else %}{{ value }}{% endif %}
       </p>
       {% if change %}
       <p class="mt-1.5 flex items-center gap-1 text-xs font-medium {% if change_positive %}text-emerald-600{% else %}text-zinc-400{% endif %}">

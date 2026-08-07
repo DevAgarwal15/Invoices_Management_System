@@ -1,0 +1,21 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Profile — ENV_BILLING{% endblock %}
+{% block topbar %}{% include "includes/topbar.html" with page_title="Profile" %}{% endblock %}
+{% block dashboard_content %}
+{% include "includes/breadcrumbs.html" with current="Profile" %}
+<div class="mx-auto max-w-3xl">
+  <div class="glass-card overflow-hidden">
+    <div class="border-b border-zinc-100 px-6 py-6 sm:px-8">
+      <p class="text-xs font-semibold uppercase tracking-widest text-brand-600">Account</p>
+      <h2 class="mt-2 text-xl font-semibold tracking-tight text-zinc-900">Profile information</h2>
+      <p class="mt-1 text-sm text-zinc-500">Your account details from Django authentication.</p>
+    </div>
+    <dl class="grid gap-4 px-6 py-6 sm:grid-cols-2 sm:px-8">
+      <div class="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4"><dt class="text-xs font-medium uppercase tracking-wider text-zinc-400">Username</dt><dd class="mt-2 text-sm font-semibold text-zinc-900">{{ request.user.username }}</dd></div>
+      <div class="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4"><dt class="text-xs font-medium uppercase tracking-wider text-zinc-400">Email</dt><dd class="mt-2 break-words text-sm font-semibold text-zinc-900">{{ request.user.email|default:"No email added" }}</dd></div>
+      <div class="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4"><dt class="text-xs font-medium uppercase tracking-wider text-zinc-400">Date joined</dt><dd class="mt-2 text-sm font-semibold text-zinc-900">{{ request.user.date_joined|date:"F d, Y" }}</dd></div>
+      <div class="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4"><dt class="text-xs font-medium uppercase tracking-wider text-zinc-400">Invoices owned</dt><dd class="mt-2 text-sm font-semibold text-zinc-900">{{ request.user.invoices.count }}</dd></div>
+    </dl>
+  </div>
+</div>
+{% endblock %}

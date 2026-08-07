@@ -16,18 +16,43 @@
   </div>
 
   <div class="flex items-center gap-2 sm:gap-3">
-    <div class="relative hidden md:block">
+    <form method="get" action="{% url 'invoice' %}" class="relative hidden md:block">
       <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"></i>
-      <input type="search" placeholder="Search invoices..."
+      <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Search invoices..."
              class="w-56 rounded-xl border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-4 text-sm text-zinc-900 transition placeholder:text-zinc-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 lg:w-64">
-    </div>
+    </form>
 
-    <button type="button"
-            class="relative flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 text-zinc-500 transition duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
-            aria-label="Notifications">
-      <i data-lucide="bell" class="h-4 w-4"></i>
-      <span class="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-brand-500"></span>
-    </button>
+    <div class="relative">
+      <button id="notifications-toggle" type="button"
+              class="relative flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 text-zinc-500 transition duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
+              aria-label="Notifications" aria-expanded="false" aria-controls="notifications-menu">
+        <i data-lucide="bell" class="h-4 w-4"></i>
+        {% if pending_notification_count %}
+          <span class="absolute -right-1 -top-1 z-10 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-brand-600 px-1 text-[9px] font-bold leading-none text-white shadow-sm">{{ pending_notification_count }}</span>
+        {% endif %}
+      </button>
+
+      <div id="notifications-menu" class="absolute right-0 top-12 z-50 hidden w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/60" role="region" aria-label="Notifications">
+        <div class="flex items-center justify-between border-b border-zinc-100 px-4 py-3">
+          <div>
+            <p class="text-sm font-semibold text-zinc-900">Notifications</p>
+            <p class="text-xs text-zinc-500">{{ pending_notification_count }} pending invoice{{ pending_notification_count|pluralize }}</p>
+          </div>
+          <i data-lucide="bell-ring" class="h-4 w-4 text-brand-600"></i>
+        </div>
+        <div class="max-h-72 overflow-y-auto">
+          {% for invoice in pending_notifications %}
+            <a href="{% url 'show_invoice' invoice.id %}" class="flex gap-3 border-b border-zinc-100 px-4 py-3 transition hover:bg-zinc-50">
+              <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600"><i data-lucide="clock-3" class="h-3.5 w-3.5"></i></span>
+              <span class="min-w-0"><span class="block truncate text-sm font-medium text-zinc-800">{{ invoice.invoice_number }}</span><span class="block truncate text-xs text-zinc-500">{{ invoice.cust_name }} · ₹{{ invoice.amount }}</span></span>
+            </a>
+          {% empty %}
+            <div class="px-4 py-8 text-center"><i data-lucide="check-circle-2" class="mx-auto h-6 w-6 text-emerald-600"></i><p class="mt-2 text-sm font-medium text-zinc-700">All caught up</p><p class="mt-1 text-xs text-zinc-500">There are no pending invoices.</p></div>
+          {% endfor %}
+        </div>
+        <a href="{% url 'unpaid_invoices' %}" class="flex items-center justify-between border-t border-zinc-100 px-4 py-3 text-xs font-semibold text-brand-600 hover:bg-brand-50">View pending invoices <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></a>
+      </div>
+    </div>
 
     <a href="{% url 'add_invoice' %}" class="btn-primary hidden !py-2 !px-3.5 text-xs sm:inline-flex">
       <i data-lucide="plus" class="h-3.5 w-3.5"></i>
@@ -35,3 +60,30 @@
     </a>
   </div>
 </header>
+
+<script>
+  (() => {
+    const toggle = document.getElementById('notifications-toggle');
+    const menu = document.getElementById('notifications-menu');
+    if (!toggle || !menu) return;
+
+    const closeMenu = (event) => {
+      if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+        menu.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      const isHidden = menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!isHidden));
+    });
+    document.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        menu.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+</script>

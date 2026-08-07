@@ -9,7 +9,7 @@
         <i data-lucide="receipt" class="h-4 w-4"></i>
       </div>
       <div>
-        <p class="text-sm font-semibold text-white">InvoiceMS</p>
+        <p class="text-sm font-semibold text-white">ENV_BILLING</p>
         <p class="text-[10px] font-medium text-zinc-500">Workspace</p>
       </div>
     </a>
@@ -42,12 +42,17 @@
 
     <p class="mb-2 mt-6 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Account</p>
 
-    <a href="#" class="sidebar-link">
+    <a href="{% url 'profile' %}" class="sidebar-link {% if url_name == 'profile' %}sidebar-link-active{% endif %}">
+      <i data-lucide="user-circle" class="h-4 w-4 shrink-0"></i>
+      Profile
+    </a>
+
+    <a href="{% url 'settings' %}" class="sidebar-link {% if url_name == 'settings' %}sidebar-link-active{% endif %}">
       <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
       Settings
     </a>
 
-    <a href="#" class="sidebar-link">
+    <a href="{% url 'help' %}" class="sidebar-link {% if url_name == 'help' %}sidebar-link-active{% endif %}">
       <i data-lucide="help-circle" class="h-4 w-4 shrink-0"></i>
       Help
     </a>

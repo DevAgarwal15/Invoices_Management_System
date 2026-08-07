@@ -1,5 +1,5 @@
 {% extends 'dashboard_base.html' %}
-{% block title %}Invoices — InvoiceMS{% endblock %}
+{% block title %}Invoices — ENV_BILLING{% endblock %}
 {% block topbar %}
   {% include "includes/topbar.html" with page_title="Invoices" %}
 {% endblock %}
@@ -13,86 +13,29 @@
       <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Invoice ledger</h2>
       <p class="mt-1 text-sm text-zinc-500">All invoices in your workspace</p>
     </div>
-    <div class="flex flex-wrap items-center gap-2">
+    <form method="get" class="flex flex-wrap items-center gap-2">
       <div class="relative">
         <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"></i>
-        <input type="search" placeholder="Search..."
-               class="w-full rounded-xl border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-4 text-sm sm:w-48 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20">
+        <input type="search" name="q" value="{{ query }}" placeholder="Invoice or customer"
+               class="w-full rounded-xl border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-4 text-sm sm:w-52 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20">
       </div>
-      <button type="button" class="btn-secondary !py-2 !px-3.5 text-xs">
-        <i data-lucide="sliders-horizontal" class="h-3.5 w-3.5"></i>
-        Filter
+      <select name="status" class="!w-auto !py-2 text-xs" aria-label="Filter by payment status">
+        <option value="all" {% if status_filter == "all" %}selected{% endif %}>All statuses</option>
+        <option value="paid" {% if status_filter == "paid" %}selected{% endif %}>Paid</option>
+        <option value="pending" {% if status_filter == "pending" %}selected{% endif %}>Pending</option>
+      </select>
+      <button type="submit" class="btn-secondary !py-2 !px-3.5 text-xs">
+        <i data-lucide="search" class="h-3.5 w-3.5"></i>
+        Apply
       </button>
       <a href="{% url 'add_invoice' %}" class="btn-primary !py-2 !px-3.5 text-xs">
         <i data-lucide="plus" class="h-3.5 w-3.5"></i>
         New invoice
       </a>
-    </div>
+    </form>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full">
-      <thead>
-        <tr class="border-b border-zinc-100 bg-zinc-50/50">
-          <th class="table-header">Invoice</th>
-          <th class="table-header">Customer</th>
-          <th class="table-header hidden sm:table-cell">Date</th>
-          <th class="table-header">Amount</th>
-          <th class="table-header">Status</th>
-          <th class="table-header text-right">Action</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-zinc-100">
-        {% for invoice in all_invoices %}
-        <tr class="group transition duration-150 hover:bg-zinc-50/80">
-          <td class="table-cell">
-            <span class="font-medium text-zinc-900">{{ invoice.invoice_number }}</span>
-          </td>
-          <td class="table-cell">{{ invoice.cust_name }}</td>
-          <td class="table-cell hidden text-zinc-400 sm:table-cell">{{ invoice.date_created|date:"M d, Y" }}</td>
-          <td class="table-cell font-medium text-zinc-900">₹{{ invoice.amount }}</td>
-          <td class="table-cell">
-            {% include "includes/components/status_badge.html" with is_paid=invoice.is_paid %}
-          </td>
-          <td class="table-cell text-right">
-            <a href="{% url 'show_invoice' %}"
-               class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-600 opacity-0 transition duration-150 group-hover:opacity-100 hover:border-brand-200 hover:text-brand-600 sm:opacity-100">
-              <i data-lucide="eye" class="h-3.5 w-3.5"></i>
-              View
-            </a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="px-5 py-16 text-center">
-            <div class="mx-auto flex max-w-xs flex-col items-center gap-3">
-              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
-                <i data-lucide="file-x" class="h-6 w-6"></i>
-              </div>
-              <p class="text-sm font-medium text-zinc-600">No invoices found</p>
-              <p class="text-xs text-zinc-400">Create your first invoice to populate the ledger</p>
-              <a href="{% url 'add_invoice' %}" class="btn-primary mt-1 !py-2 !px-4 text-xs">
-                <i data-lucide="plus" class="h-3.5 w-3.5"></i>
-                New invoice
-              </a>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  {% if all_invoices %}
-  <div class="flex flex-col gap-3 border-t border-zinc-100 px-6 py-4 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-    <p>Showing <span class="font-medium text-zinc-700">{{ all_invoices|length }}</span> invoice{{ all_invoices|length|pluralize }}</p>
-    <div class="flex items-center gap-1.5">
-      <button type="button" class="btn-secondary !py-1.5 !px-3 text-xs opacity-50" disabled>Previous</button>
-      <button type="button" class="rounded-xl bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white">1</button>
-      <button type="button" class="btn-secondary !py-1.5 !px-3 text-xs opacity-50" disabled>Next</button>
-    </div>
-  </div>
-  {% endif %}
+  {% include "includes/invoice_table.html" %}
 </div>
 
 {% endblock %}

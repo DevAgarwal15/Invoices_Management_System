@@ -1,0 +1,85 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="border-b border-zinc-100 bg-zinc-50/50">
+        <th class="table-header">Invoice</th>
+        <th class="table-header">Customer</th>
+        <th class="table-header hidden sm:table-cell">Date</th>
+        <th class="table-header">Amount</th>
+        <th class="table-header">Status</th>
+        <th class="table-header text-right">Action</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-zinc-100">
+      {% for invoice in all_invoices %}
+      <tr class="group transition duration-150 hover:bg-zinc-50/80">
+        <td class="table-cell">
+          <a href="{% url 'show_invoice' invoice.id %}" class="font-medium text-zinc-900 underline decoration-zinc-200 underline-offset-4 transition hover:text-brand-600 hover:decoration-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+            {{ invoice.invoice_number }}
+          </a>
+        </td>
+        <td class="table-cell">{{ invoice.cust_name }}</td>
+        <td class="table-cell hidden text-zinc-400 sm:table-cell">{{ invoice.date_created|date:"M d, Y" }}</td>
+        <td class="table-cell font-medium text-zinc-900">₹{{ invoice.amount }}</td>
+        <td class="table-cell">
+          {% include "includes/components/status_badge.html" with is_paid=invoice.is_paid %}
+        </td>
+        <td class="table-cell text-right">
+          <div class="flex items-center justify-end gap-2">
+            <a href="{% url 'show_invoice' invoice.id %}" aria-label="View {{ invoice.invoice_number }}" class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-brand-200 hover:text-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+              <i data-lucide="eye" class="h-3.5 w-3.5"></i>
+              View
+            </a>
+            <form method="post" action="{% url 'delete_invoice' %}" onsubmit="return confirm('Delete {{ invoice.invoice_number }}? This action cannot be undone.');">
+              {% csrf_token %}
+              <input type="hidden" name="invoice_id" value="{{ invoice.id }}">
+              <button type="submit" aria-label="Delete {{ invoice.invoice_number }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 bg-white text-red-600 transition hover:border-red-300 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/30">
+                <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="px-5 py-16 text-center">
+          <div class="mx-auto flex max-w-xs flex-col items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
+              <i data-lucide="file-x" class="h-6 w-6"></i>
+            </div>
+            <p class="text-sm font-medium text-zinc-600">No invoices found</p>
+            <p class="text-xs text-zinc-400">Try a different search or create a new invoice.</p>
+            <a href="{% url 'add_invoice' %}" class="btn-primary mt-1 !py-2 !px-4 text-xs">
+              <i data-lucide="plus" class="h-3.5 w-3.5"></i>
+              New invoice
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if page_obj.paginator.count %}
+<div class="flex flex-col gap-3 border-t border-zinc-100 px-6 py-4 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
+  <p>Showing <span class="font-medium text-zinc-700">{{ page_obj.start_index }}–{{ page_obj.end_index }}</span> of <span class="font-medium text-zinc-700">{{ page_obj.paginator.count }}</span></p>
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav class="flex flex-wrap items-center gap-1.5" aria-label="Invoice pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="btn-secondary !py-1.5 !px-3 text-xs">Previous</a>
+    {% endif %}
+    {% for page_number in page_obj.paginator.page_range %}
+      {% if page_number == page_obj.number %}
+        <span class="rounded-xl bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white" aria-current="page">{{ page_number }}</span>
+      {% else %}
+        <a href="?page={{ page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="btn-secondary !py-1.5 !px-3 text-xs">{{ page_number }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="btn-secondary !py-1.5 !px-3 text-xs">Next</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endif %}

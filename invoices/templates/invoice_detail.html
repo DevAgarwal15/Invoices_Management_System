@@ -1,68 +1,56 @@
 {% extends 'dashboard_base.html' %}
-{% block title %}Invoice Detail — InvoiceMS{% endblock %}
+{% block title %}{{ invoice.invoice_number }} — ENV_BILLING{% endblock %}
 {% block topbar %}
   {% include "includes/topbar.html" with page_title="Invoice Detail" %}
+{% endblock %}
+{% block extra_head %}
+<style>
+  @media print {
+    body { background: #fff !important; }
+    .no-print, #sidebar, header, nav, aside { display: none !important; }
+    main { padding: 0 !important; }
+    .invoice-document { border: 0 !important; box-shadow: none !important; }
+  }
+</style>
 {% endblock %}
 {% block dashboard_content %}
 
 {% include "includes/breadcrumbs.html" with current="Detail" %}
 
-<div class="grid gap-6 lg:grid-cols-[1fr_340px]">
-  <div class="animate-on-load animate-fade-in-up glass-card overflow-hidden">
+<div class="mx-auto max-w-4xl">
+  <div class="invoice-document animate-on-load animate-fade-in-up glass-card overflow-hidden">
     {% if invoice %}
-      <div class="border-b border-zinc-100 px-6 py-6 sm:px-8">
+      <div class="border-b border-zinc-100 px-6 py-7 sm:px-10">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-brand-600">Invoice</p>
-            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">{{ invoice.invoice_number }}</h2>
-            <p class="mt-1 text-sm text-zinc-500">Created {{ invoice.date_created|date:"F d, Y" }}</p>
+            <p class="text-sm font-bold tracking-tight text-zinc-900">ENV_BILLING</p>
+            <p class="mt-5 text-xs font-semibold uppercase tracking-widest text-brand-600">Invoice</p>
+            <h2 class="mt-2 break-all text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">{{ invoice.invoice_number }}</h2>
+            <p class="mt-2 text-sm text-zinc-500">Created {{ invoice.date_created|date:"F d, Y" }}</p>
           </div>
-          {% include "includes/components/status_badge.html" with is_paid=invoice.is_paid %}
+          <div class="text-left sm:text-right"><p class="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-400">Payment status</p>{% include "includes/components/status_badge.html" with is_paid=invoice.is_paid %}</div>
         </div>
       </div>
 
-      <div class="grid gap-4 p-6 sm:grid-cols-2 sm:p-8">
-        <div class="rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
-          <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-400">
-            <i data-lucide="user" class="h-3.5 w-3.5"></i>
-            Customer
-          </div>
-          <p class="mt-3 text-lg font-semibold text-zinc-900">{{ invoice.cust_name }}</p>
+      <div class="space-y-8 p-6 sm:p-10">
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div><p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Bill to</p><div class="mt-3 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><i data-lucide="user" class="h-5 w-5"></i></span><p class="text-lg font-semibold text-zinc-900">{{ invoice.cust_name }}</p></div></div>
+          <div><p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Invoice information</p><dl class="mt-3 space-y-2 text-sm"><div class="flex justify-between gap-4"><dt class="text-zinc-500">Invoice number</dt><dd class="font-medium text-zinc-900">{{ invoice.invoice_number }}</dd></div><div class="flex justify-between gap-4"><dt class="text-zinc-500">Date</dt><dd class="font-medium text-zinc-900">{{ invoice.date_created|date:"M d, Y" }}</dd></div><div class="flex justify-between gap-4"><dt class="text-zinc-500">Status</dt><dd class="font-medium {% if invoice.is_paid %}text-emerald-600{% else %}text-amber-600{% endif %}">{% if invoice.is_paid %}Paid{% else %}Pending{% endif %}</dd></div></dl></div>
         </div>
-
-        <div class="rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
-          <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-400">
-            <i data-lucide="banknote" class="h-3.5 w-3.5"></i>
-            Amount
-          </div>
-          <p class="mt-3 text-lg font-semibold text-zinc-900">₹{{ invoice.amount }}</p>
-        </div>
-
-        <div class="rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
-          <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-400">
-            <i data-lucide="hash" class="h-3.5 w-3.5"></i>
-            Reference
-          </div>
-          <p class="mt-3 text-lg font-semibold text-zinc-900">{{ invoice.invoice_number }}</p>
-        </div>
-
-        <div class="rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
-          <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-400">
-            <i data-lucide="activity" class="h-3.5 w-3.5"></i>
-            Status
-          </div>
-          <p class="mt-3 text-lg font-semibold {% if invoice.is_paid %}text-emerald-600{% else %}text-amber-600{% endif %}">
-            {% if invoice.is_paid %}Paid{% else %}Pending{% endif %}
-          </p>
-        </div>
+        <div class="border-y border-zinc-100 py-6"><p class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Amount</p><p class="mt-2 text-2xl font-semibold tracking-tight text-zinc-900">₹{{ invoice.amount }}</p></div>
+        <div class="flex items-end justify-between gap-4"><p class="text-sm font-bold uppercase tracking-widest text-zinc-900">Total</p><p class="text-3xl font-bold tracking-tight text-brand-700">₹{{ invoice.amount }}</p></div>
       </div>
 
-      <div class="border-t border-zinc-100 px-6 py-5 sm:px-8">
+      <div class="no-print border-t border-zinc-100 px-6 py-5 sm:px-8">
         <div class="flex flex-wrap gap-3">
           <a href="{% url 'invoice' %}" class="btn-secondary !py-2 !px-4 text-xs">
             <i data-lucide="arrow-left" class="h-3.5 w-3.5"></i>
             Back to ledger
           </a>
+          <button type="button" onclick="window.print()" class="btn-primary !py-2 !px-4 text-xs">
+            <i data-lucide="printer" class="h-3.5 w-3.5"></i>
+            Print invoice
+          </button>
         </div>
       </div>
 
@@ -78,27 +66,6 @@
     {% endif %}
   </div>
 
-  <div class="space-y-5">
-    <div class="animate-on-load animate-fade-in-up glass-card p-6">
-      <p class="text-xs font-semibold uppercase tracking-widest text-brand-600">Next steps</p>
-      <h3 class="mt-3 text-base font-semibold text-zinc-900">Manage this record</h3>
-      <p class="mt-2 text-sm leading-6 text-zinc-500">Use the ledger to review all activity and keep clients updated with clear payment states.</p>
-      <div class="mt-5 space-y-2">
-        <a href="{% url 'invoice' %}" class="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition duration-200 hover:border-brand-200 hover:bg-brand-50/50 hover:text-brand-700">
-          <span class="flex items-center gap-2"><i data-lucide="file-text" class="h-4 w-4"></i> All invoices</span>
-          <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-        </a>
-        <a href="{% url 'dashboard' %}" class="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition duration-200 hover:border-brand-200 hover:bg-brand-50/50 hover:text-brand-700">
-          <span class="flex items-center gap-2"><i data-lucide="layout-dashboard" class="h-4 w-4"></i> Dashboard</span>
-          <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-        </a>
-        <a href="{% url 'add_invoice' %}" class="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition duration-200 hover:border-brand-200 hover:bg-brand-50/50 hover:text-brand-700">
-          <span class="flex items-center gap-2"><i data-lucide="plus-circle" class="h-4 w-4"></i> New invoice</span>
-          <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-        </a>
-      </div>
-    </div>
-  </div>
 </div>
 
 {% endblock %}
