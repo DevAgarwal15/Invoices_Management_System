@@ -1,0 +1,48 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Edit {{ invoice.invoice_number }} — ENV_BILLING{% endblock %}
+{% block topbar %}
+  {% include "includes/topbar.html" with page_title="Edit Invoice" %}
+{% endblock %}
+{% block dashboard_content %}
+
+{% include "includes/breadcrumbs.html" with current="Edit Invoice" %}
+
+<div class="mx-auto max-w-2xl">
+  <div class="animate-on-load animate-fade-in-up glass-card overflow-hidden shadow-xl shadow-zinc-200/40">
+    <div class="border-b border-zinc-100 px-6 py-6 sm:px-8">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-600/30">
+          <i data-lucide="pencil" class="h-5 w-5"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Edit invoice</h2>
+          <p class="text-sm text-zinc-500">Update the details for {{ invoice.invoice_number }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" class="space-y-5 px-6 py-6 sm:px-8" novalidate>
+      {% csrf_token %}
+      <div class="space-y-2 rounded-xl border border-zinc-200 bg-zinc-50/60 px-4 py-3">
+        <p class="text-sm font-medium text-zinc-700">Invoice number</p>
+        <p class="text-sm font-semibold text-zinc-900">{{ invoice.invoice_number }}</p>
+      </div>
+      {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+        {% include "includes/components/form_field.html" with field=field %}
+      {% endfor %}
+
+      <div class="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:justify-end">
+        <a href="{% url 'show_invoice' invoice.id %}" class="btn-secondary text-center">Cancel</a>
+        <button type="submit" class="btn-primary">
+          <i data-lucide="save" class="h-4 w-4"></i>
+          Save changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

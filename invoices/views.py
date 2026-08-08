@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Invoice
-from .forms import InvoiceForm
+from .forms import InvoiceEditForm, InvoiceForm
 
 
 def _invoice_page(request, queryset, template_name, page_title, status_filter):
@@ -72,6 +72,21 @@ def create_invoice(request):
 def show_one_invoice(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id, owner=request.user)
     return render(request, "invoice_detail.html", {"invoice": invoice})
+
+
+@login_required
+def edit_invoice(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id, owner=request.user)
+    if request.method == "POST":
+        form = InvoiceEditForm(request.POST, instance=invoice)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{invoice.invoice_number} was updated.")
+            return redirect("show_invoice", invoice_id=invoice.id)
+    else:
+        form = InvoiceEditForm(instance=invoice)
+
+    return render(request, "invoice_edit.html", {"form": form, "invoice": invoice})
 
 
 @login_required

@@ -25,8 +25,8 @@
       </div>
       <div class="mt-6" data-status-chart data-paid="{{ paid_invoices }}" data-pending="{{ pending_invoices }}">
         <div class="flex h-3 overflow-hidden rounded-full bg-zinc-100" role="img" aria-label="Paid and pending invoice distribution">
-          <span data-paid-bar class="h-full bg-emerald-500 transition-all duration-700"></span>
-          <span data-pending-bar class="h-full bg-amber-400 transition-all duration-700"></span>
+          <span data-paid-bar class="h-full shrink-0 bg-emerald-500 transition-all duration-700"></span>
+          <span data-pending-bar class="h-full shrink-0 bg-amber-400 transition-all duration-700"></span>
         </div>
         <div class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div class="flex items-center justify-between rounded-xl bg-emerald-50/70 px-4 py-3"><span class="flex items-center gap-2 text-emerald-700"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Paid</span><strong class="text-emerald-800">{{ paid_invoices }}</strong></div>
@@ -143,8 +143,10 @@
     const paid = Number(statusChart.dataset.paid) || 0;
     const pending = Number(statusChart.dataset.pending) || 0;
     const total = paid + pending;
-    statusChart.querySelector('[data-paid-bar]').style.width = `${total ? (paid / total) * 100 : 0}%`;
-    statusChart.querySelector('[data-pending-bar]').style.width = `${total ? (pending / total) * 100 : 0}%`;
+    const paidPercentage = total ? (paid / total) * 100 : 0;
+    const pendingPercentage = total ? (pending / total) * 100 : 0;
+    statusChart.querySelector('[data-paid-bar]').style.flexBasis = `${paidPercentage}%`;
+    statusChart.querySelector('[data-pending-bar]').style.flexBasis = `${pendingPercentage}%`;
   }
 </script>
 {% endblock %}
