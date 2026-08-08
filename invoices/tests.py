@@ -50,6 +50,59 @@ class InvoiceWorkflowTests(TestCase):
             404,
         )
 
+    def test_owner_can_edit_invoice_and_change_status(self):
+        self.client.login(username="owner", password="test-password")
+        response = self.client.post(
+            reverse("edit_invoice", args=[self.invoice.id]),
+            {
+                "cust_name": "Updated Customer",
+                "amount": "1500.00",
+                "is_paid": "False",
+            },
+        )
+
+        self.assertRedirects(response, reverse("show_invoice", args=[self.invoice.id]))
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.cust_name, "Updated Customer")
+        self.assertEqual(self.invoice.amount, Decimal("1500.00"))
+        self.assertFalse(self.invoice.is_paid)
+        invoice_number = self.invoice.invoice_number
+
+        self.client.post(
+            reverse("edit_invoice", args=[self.invoice.id]),
+            {"cust_name": "Updated Customer", "amount": "1500.00", "is_paid": "True"},
+        )
+        self.invoice.refresh_from_db()
+        self.assertTrue(self.invoice.is_paid)
+        self.assertEqual(self.invoice.invoice_number, invoice_number)
+
+        dashboard_response = self.client.get(reverse("dashboard"))
+        self.assertEqual(dashboard_response.context["paid_invoices"], 1)
+        self.assertEqual(dashboard_response.context["pending_invoices"], 1)
+        self.assertEqual(dashboard_response.context["total_revenue"], Decimal("1900.00"))
+
+    def test_edit_invoice_is_owner_scoped_and_missing_invoice_is_404(self):
+        self.client.login(username="other", password="test-password")
+        self.assertEqual(
+            self.client.get(reverse("edit_invoice", args=[self.invoice.id])).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get(reverse("edit_invoice", args=[999999])).status_code,
+            404,
+        )
+
+    def test_edit_invoice_cancel_does_not_change_invoice(self):
+        self.client.login(username="owner", password="test-password")
+        response = self.client.get(reverse("edit_invoice", args=[self.invoice.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.invoice.invoice_number)
+        self.assertContains(response, 'href="/invoice/%d/"' % self.invoice.id)
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.cust_name, "Acme Customer")
+        self.assertTrue(self.invoice.is_paid)
+
     def test_invoice_list_combines_search_and_status(self):
         self.client.login(username="owner", password="test-password")
         response = self.client.get(

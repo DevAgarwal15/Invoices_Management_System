@@ -11,3 +11,11 @@ class InvoiceForm(forms.ModelForm):
         if amount <= 0:
             raise forms.ValidationError('Amount Must BE Greater Than Zero')
         return amount
+
+
+class InvoiceEditForm(InvoiceForm):
+    is_paid = forms.TypedChoiceField(
+        choices=((True, 'Paid'), (False, 'Pending')),
+        coerce=lambda value: value == 'True',
+        label='Payment status',
+    )
